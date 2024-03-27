@@ -10,31 +10,24 @@ function App() {
 
   useEffect(() => {
     if (animationState === "closing") {
-      setTimeout(() => {
+      const timeOut = setTimeout(() => {
         setActiveCard(null);
         setAnimateState("idle");
       }, 1000);
+
+      return () => clearTimeout(timeOut);
     }
   }, [animationState]);
 
   return (
     <div className="grid">
-      <div className="grid h-screen grid-cols-2 place-items-center overflow-hidden bg-blue-500 [grid-area:1/1] [perspective:500px]">
-        <div className="peer/next blob-left group relative flex h-full w-full items-end pb-8 pr-[80px] md:items-center md:pb-0">
-          <ActionButton direction="left" text="Next card" />
-        </div>
-        <div className="peer/show blob-right group relative flex h-full w-full items-end pb-8 pl-[80px] md:items-center md:pb-0">
-          <ActionButton
-            onClick={(ev) => {
-              setAnimateState("opening");
-              setActiveCard("fake-id");
-              ev.currentTarget.blur();
-            }}
-            text="Show me!"
-            direction="right"
-          />
-        </div>
-
+      <div
+        className="grid h-screen grid-cols-2 place-items-center overflow-hidden bg-blue-500 [grid-area:1/1] [perspective:500px]"
+        onClick={() => {
+          setAnimateState("opening");
+          setActiveCard("fake-id");
+        }}
+      >
         <Card className="rotate-[1deg] [grid-area:1/1]" />
         <Card className="-rotate-[1deg] [grid-area:1/1]" />
         <Card
@@ -56,7 +49,7 @@ function App() {
         <div className="content-container absolute inset-0 flex justify-center overflow-auto pb-20">
           <div
             className={twMerge(
-              "pointer-events-none relative top-[5vh] mb-20 min-h-screen w-full bg-white px-16 py-16 opacity-0 md:rounded-[4.5rem]",
+              "pointer-events-none relative top-[5vh] mb-20 min-h-screen w-[90%] rounded-[4.5rem] bg-white px-16 py-16 opacity-0",
               animationState === "opening" && "animate-card-details",
               animationState === "closing" && "animate-card-details-hidden",
             )}
@@ -99,37 +92,6 @@ const Card = ({ className, title }: { className?: string; title?: string }) => (
     </div>
     <div className="pointer-events-none rounded-3xl bg-white [grid-area:1/1] [backface-visibility:hidden] [transform:rotateY(180deg)]" />
   </div>
-);
-
-const ActionButton = ({
-  onClick,
-  direction,
-  text,
-}: {
-  onClick?: (ev: React.PointerEvent<HTMLButtonElement>) => void;
-  direction: "left" | "right";
-  text: string;
-}) => (
-  <button
-    onClick={onClick}
-    className={twMerge(
-      "relative flex w-full items-center justify-center font-bold text-[rgba(0,0,0,.6)] transition-[transform,color] duration-500 focus-visible:text-white group-hover:text-white md:text-4xl",
-      direction === "right" &&
-        "focus-visible:translate-x-36 group-hover:translate-x-36",
-      direction === "left" &&
-        "focus-visible:-translate-x-36 group-hover:-translate-x-36",
-    )}
-  >
-    <span
-      className={twMerge(
-        "button-underline relative block",
-        direction === "right" && "[--from:-30px] [--to:0px]",
-        direction === "left" && "[--from:0] [--to:-30px]",
-      )}
-    >
-      {text}
-    </span>
-  </button>
 );
 
 export default App;

@@ -6,8 +6,11 @@ export default {
       keyframes: {
         "card-visible": {
           "0%": {
+            transform: "rotate3d(0, 0, 0, 0) translate3d(0, 0px, 0px)",
+          },
+          "20%": {
             transform:
-              "rotate3d(1, 12, -3, 18deg) translate3d(210px, 0px, 90px)",
+              "rotate3d(0, 0.2, -5, 5deg) translate3d(80px, 10px, 0px)",
           },
           "95%": {
             transform:
@@ -36,7 +39,7 @@ export default {
             opacity: 0,
             pointerEvents: "none",
           },
-          "80%": {
+          "90%": {
             opacity: 0,
             pointerEvents: "none",
           },
